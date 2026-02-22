@@ -17,38 +17,123 @@ public class BST {
      */
     public int height() {
         //TODO implementar
-        return -1;
+        if(isEmpty()) return -1;
+        return heightRecursive(this.root);
     }
+
+    private int heightRecursive(Node node){
+
+        if(node == null){
+            return 0;
+        }
+        if(node.left == null && node.right == null){
+            return 0;
+        }
+
+        int heightLeft = heightRecursive(node.left);
+        int heightRight = heightRecursive(node.right);
+        return Math.max(heightLeft,heightRight) + 1;
+    }
+
 
     /**
      * Retorna a altura de um determinado nó. Auxiliar
      * para recursão e para o balance.
      */
     private int height(Node node) {
-        return -1;
+        if(isEmpty()){
+            return -1;
+        }
+        return heightRecursive(node);
     }
 
     private int balance(Node node) {
-        return -1;
+
+        if(isEmpty()){
+            return -1;
+        }
+
+        return modulo(height(node.left) - height(node.right));
+    }
+
+    private int modulo(int k){
+        if(k < 0){
+            return k* -1;
+        }
+        else{
+            return k*1;
+        }
+    }
+
+    public boolean isLeftPending(){
+        if(isEmpty()){
+            return false;
+        }
+        return isLeftPending(this.root)
+    }
+
+    private boolean isLeftPending(Node node){
+        if(node == null){
+            return false;
+        }
+        return balance(node) == 1;
+    }
+
+    public boolean isRightPending(){
+        if(isEmpty()){
+            return false;
+        }
+        return isRightPending(this.root);
+    }
+
+    private boolean isRightPending(Node node){
+        if(node == null){
+            return false;
+        }
+        return balance(node) == -1;
+    }
+
+    public boolean isBalanced(){
+        if(isEmpty()){
+            return true;
+        }
+        return isBalanced(this.root);
+    }
+
+    private boolean isBalanced(Node node){
+        if(node == null){
+            return true;
+        }
+        return balance(node) == 0;
+    }
+
+
+    private void rotationRight(Node node){
+
+        if(node != null){
+            Node nodePai = node.parent;
+            node.left.right = node;
+            node.left.parent = nodePai;
+        }
     }
 
     /**
-     * Busca o nó cujo valor é igual ao passado como parâmetro. Essa é a implementação 
+     * Busca o nó cujo valor é igual ao passado como parâmetro. Essa é a implementação
      * iterativa clássica da busca binária em uma árvore binária de pesquisa.
      * @param element O elemento a ser procurado.
      * @return O nó contendo o elemento procurado. O método retorna null caso
      * o elemento não esteja presente na árvore.
      */
     public Node search(int element) {
-        
+
         Node aux = this.root;
-        
-        while (aux != null) {   
+
+        while (aux != null) {
             if (aux.value == element) return aux;
             if (element < aux.value) aux = aux.left;
             if (element > aux.value) aux = aux.right;
         }
-        
+
         return null;
 
     }
@@ -56,7 +141,7 @@ public class BST {
     public boolean isEmpty() {
         return this.root == null;
     }
-    
+
     /**
      * Implementação iterativa da adição de um elemento em uma árvore binária de pequisa.
      * @param element o valor a ser adicionado na árvore.
@@ -66,36 +151,36 @@ public class BST {
         if (isEmpty())
             this.root = new Node(element);
         else {
-            
+
             Node aux = this.root;
-            
+
             while (aux != null) {
-                
+
                 if (element < aux.value) {
-                    if (aux.left == null) { 
+                    if (aux.left == null) {
                         Node newNode = new Node(element);
                         aux.left = newNode;
                         newNode.parent = aux;
                         return;
                     }
-                    
+
                     aux = aux.left;
                 } else {
-                    if (aux.right == null) { 
+                    if (aux.right == null) {
                         Node newNode = new Node(element);
                         aux.right = newNode;
                         newNode.parent = aux;
                         return;
                     }
-                    
+
                     aux = aux.right;
                 }
             }
         }
-        
+
     }
-    
-    
+
+
     /**
      * Retorna o nó que contém o valor máximo da árvore. Implementação recursiva.
      * @return o nó contendo o valor máximo da árvore ou null se a árvore estiver vazia.
@@ -104,7 +189,7 @@ public class BST {
         if (isEmpty()) return null;
         return min(this.root);
     }
-    
+
     /**
      * Retorna o nó que contém o valor máximo da árvore cuja raiz é passada como parâmetro. Implementação recursiva.
      * @param a raiz da árvore.
@@ -121,74 +206,74 @@ public class BST {
      */
     public Node max() {
         if (isEmpty()) return null;
-        
+
         Node node = this.root;
         while(node.right != null)
             node = node.right;
-        
+
         return node;
     }
-    
+
     /**
      * Retorna o nó que contém o valor máximo da árvore cuja raiz é passada como parâmetro. Implementação recursiva.
      * @param raiz da árvore.
      * @return o nó contendo o valor máximo da árvore ou null se a árvore estiver vazia.
      */
-    
+
     private Node max(Node node) {
         if (node.right == null) return node;
         else return max(node.right);
     }
-    
+
     /**
-     * Retorna o nó cujo valor é predecessor do valor passado como parâmetro. 
+     * Retorna o nó cujo valor é predecessor do valor passado como parâmetro.
      * @param valor O nó para o qual deseja-se identificar o predecessor.
-     * @return O nó contendo o predecessor do valor passado como parâmetro. O método retorna null caso não haja 
+     * @return O nó contendo o predecessor do valor passado como parâmetro. O método retorna null caso não haja
      * predecessor.
      */
     public Node predecessor(Node node) {
         if (node == null) return null;
-        
+
         if (node.left != null)
             return max(node.left);
         else {
             Node aux = node.parent;
-            
+
             while (aux != null && aux.value > node.value)
                 aux = aux.parent;
-            
+
             return aux;
         }
     }
-    
+
     /**
-     * Retorna o nó cujo valor é sucessor do valor passado como parâmetro. 
+     * Retorna o nó cujo valor é sucessor do valor passado como parâmetro.
      * @param valor O valor para o qual deseja-se identificar o sucessor.
      * @return O nó contendo o sucessor do valor passado como parâmetro. O método retorna null
      * caso não haja sucessor.
      */
     public Node sucessor(Node node) {
         if (node == null) return null;
-        
+
         if (node.right != null)
             return min(node.right);
         else {
             Node aux = node.parent;
-            
+
             while (aux != null && aux.value < node.value)
                 aux = aux.parent;
-            
+
             return aux;
         }
     }
-    
-    
+
+
     /**
      * Implementação recursiva do método de adição.
      * @param element elemento a ser adicionado.
      */
     public void recursiveAdd(int element) {
-        
+
         if (isEmpty())
             this.root = new Node(element);
         else {
@@ -196,7 +281,7 @@ public class BST {
             recursiveAdd(aux, element);
         }
         this.size += 1;
-        
+
     }
 
     /**
@@ -205,7 +290,7 @@ public class BST {
      * @param element elemento a ser adicionado.
      */
     private void recursiveAdd(Node node, int element) {
-        
+
         if (element < node.value) {
             if (node.left == null) {
                 Node newNode = new Node(element);
@@ -223,9 +308,9 @@ public class BST {
             }
             recursiveAdd(node.right, element);
         }
-        
+
     }
-    
+
     /**
      * Remove the node with the value.
      * @param value
@@ -236,15 +321,15 @@ public class BST {
             remove(toRemove);
             this.size -= 1;
         }
-        
+
     }
-    
+
     /**
      * Remove node. Private method to control recursion.
      * @param toRemove
      */
     private void remove(Node toRemove) {
-        
+
         // First case: node is leaf.
         if (toRemove.isLeaf()) {
             if (toRemove == this.root)
@@ -255,7 +340,7 @@ public class BST {
                 else
                     toRemove.parent.right = null;
             }
-        
+
         // Second case: node has only left child or only right child
         } else if (toRemove.hasOnlyLeftChild()) {
             if (toRemove == this.root)  {
@@ -279,20 +364,20 @@ public class BST {
                 else
                     toRemove.parent.right = toRemove.right;
             }
-            
+
         // Third case: node has two children
         } else {
             Node sucessor = sucessor(toRemove);
             toRemove.value = sucessor.value;
             remove(sucessor);
         }
-            
+
     }
 
-    
-    
+
+
     /**
-     * Busca o nó cujo valor é igual ao passado como parâmetro. Essa é a implementação 
+     * Busca o nó cujo valor é igual ao passado como parâmetro. Essa é a implementação
      * recursiva clássica da busca binária em uma árvore binária de pesquisa.
      * @param element O elemento a ser procurado.
      * @return O nó contendo o elemento procurado. O método retorna null caso
@@ -301,7 +386,7 @@ public class BST {
     public Node recursiveSearch(int element) {
         return recursiveSearch(this.root, element);
     }
-    
+
     /**
      * Busca o nó cujo valor é igual ao passado como parâmetro na sub-árvore cuja raiz é node. Trata-se de um método auxiliar
      * para a busca recursiva.
@@ -345,7 +430,7 @@ public class BST {
             System.out.println(node.value);
             inOrder(node.right);
         }
-        
+
     }
 
     /**
@@ -361,28 +446,28 @@ public class BST {
             posOrder(node.right);
             System.out.println(node.value);
         }
-        
+
     }
-    
+
     /**
-     * Percorre a árvore em largura. 
+     * Percorre a árvore em largura.
      * @return Uma lista com a os elementos percorridos em largura.
      */
     public ArrayList<Integer> bfs() {
         ArrayList<Integer> list = new ArrayList<Integer>();
         Deque<Node> queue = new LinkedList<Node>();
-        
+
         if (!isEmpty()) {
             queue.addLast(this.root);
             while (!queue.isEmpty()) {
                 Node current = queue.removeFirst();
-                
+
                 list.add(current.value);
-                
-                if(current.left != null) 
+
+                if(current.left != null)
                     queue.addLast(current.left);
-                if(current.right != null) 
-                    queue.addLast(current.right);   
+                if(current.right != null)
+                    queue.addLast(current.right);
             }
         }
         return list;
@@ -394,17 +479,17 @@ public class BST {
     public int size() {
         return this.size;
     }
-    
+
 }
 
 
 class Node {
-    
+
     int value;
     Node left;
     Node right;
     Node parent;
-    
+
     Node(int v) {
         this.value = v;
     }
@@ -424,7 +509,7 @@ class Node {
     public boolean hasOnlyLeftChild() {
         return (this.left != null && this.right == null);
     }
-    
+
     public boolean hasOnlyRightChild() {
         return (this.left == null && this.right != null);
     }
@@ -432,5 +517,5 @@ class Node {
     public boolean isLeaf() {
         return this.left == null && this.right == null;
     }
-    
+
 }

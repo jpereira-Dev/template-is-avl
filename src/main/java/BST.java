@@ -110,8 +110,18 @@ public class BST {
 
     private void rotationRight(Node node){
 
-        if(node != null || node.left != null){
+        if (node == null || node.left == null) {
+            return;
         }
+
+        Node y = node.left;
+        node.left = y.right;
+        y.right = node;
+
+        if(node.parent == null){
+            this.root = y;
+        }
+        y.parent = y.right.parent;
     }
 
     /**

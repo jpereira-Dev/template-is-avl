@@ -69,7 +69,7 @@ public class BST {
         if(isEmpty()){
             return false;
         }
-        return isLeftPending(this.root)
+        return isLeftPending(this.root);
     }
 
     private boolean isLeftPending(Node node){
@@ -110,10 +110,7 @@ public class BST {
 
     private void rotationRight(Node node){
 
-        if(node != null){
-            Node nodePai = node.parent;
-            node.left.right = node;
-            node.left.parent = nodePai;
+        if(node != null || node.left != null){
         }
     }
 

@@ -9,7 +9,22 @@ public class BST {
 
     public boolean isAVL() {
         //TODO: implementar
-        return false;
+        if(isEmpty()){
+            return true;
+        }
+        return isAVL(this.root);
+    }
+
+    private boolean isAVL(Node node){
+
+        if(node == null){
+            return true;
+        }
+        if(!node.isBalanced()){
+            return false;
+        }
+        return isAVL(node.left) && isAVL(node.right);
+
     }
 
     /**
@@ -48,63 +63,7 @@ public class BST {
     }
 
     private int balance(Node node) {
-
-        if(isEmpty()){
-            return -1;
-        }
-
-        return modulo(height(node.left) - height(node.right));
-    }
-
-    private int modulo(int k){
-        if(k < 0){
-            return k* -1;
-        }
-        else{
-            return k*1;
-        }
-    }
-
-    public boolean isLeftPending(){
-        if(isEmpty()){
-            return false;
-        }
-        return isLeftPending(this.root);
-    }
-
-    private boolean isLeftPending(Node node){
-        if(node == null){
-            return false;
-        }
-        return balance(node) == 1;
-    }
-
-    public boolean isRightPending(){
-        if(isEmpty()){
-            return false;
-        }
-        return isRightPending(this.root);
-    }
-
-    private boolean isRightPending(Node node){
-        if(node == null){
-            return false;
-        }
-        return balance(node) == -1;
-    }
-
-    public boolean isBalanced(){
-        if(isEmpty()){
-            return true;
-        }
-        return isBalanced(this.root);
-    }
-
-    private boolean isBalanced(Node node){
-        if(node == null){
-            return true;
-        }
-        return balance(node) == 0;
+        return (height(node.left) - height(node.right));
     }
 
 
@@ -509,6 +468,35 @@ class Node {
         return this.parent;
     }
 
+    public int height() {
+        return Math.max(heightRecursive(this.left),heightRecursive(this.right)) + 1 ;
+    }
+
+    private int heightRecursive(Node node){
+        if(node.left == null && node.right == null){
+            return 0;
+        }
+        int heightLeft = heightRecursive(node.left);
+        int heightRight = heightRecursive(node.right);
+        return Math.max(heightLeft, heightRight) + 1;
+    }
+
+    private int balance(){
+        return heightRecursive(left) - heightRecursive(right);
+    }
+
+    public boolean isBalanced(){
+        int balanced = balance();
+        return balanced >= -1 && balanced <= 1;
+    }
+
+    public boolean isLeftPending(){
+        return balance() > 1;
+    }
+    public boolean isRightPending(){
+        return balance() < -1;
+    }
+
     public boolean hasOnlyLeftChild() {
         return (this.left != null && this.right == null);
     }
@@ -519,6 +507,10 @@ class Node {
 
     public boolean isLeaf() {
         return this.left == null && this.right == null;
+    }
+
+    private int balance(Node node) {
+        return (heightRecursive(node.left) - heightRecursive(node.right));
     }
 
 }

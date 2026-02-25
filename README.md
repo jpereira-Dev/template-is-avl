@@ -1,8 +1,8 @@
 # Identificação
 
-* Nome: 
-* Email (@ccc): 
-* Matrícula: 
+* Nome: joao pereira de oliveira
+* Email (@ccc): joao.pereira.de.oliveira@ccc.ufcg.edu.br
+* Matrícula: 124212155
 
 # Roteiro: isAVL
 
@@ -22,9 +22,9 @@
 
 > Executando os testes: `gradle test` na raiz do projeto.
 
-## A tarefa. 
+## A tarefa.
 
-Você deve implementar o método isAVL, que verifica se uma BST é AVL, dada a definição que vimos em sala de aula. Para isso, você vai precisar implementar alguns métodos auxiliares, que 
+Você deve implementar o método isAVL, que verifica se uma BST é AVL, dada a definição que vimos em sala de aula. Para isso, você vai precisar implementar alguns métodos auxiliares, que
 também estão na classe BST.
 
 ## Entregando o lab
